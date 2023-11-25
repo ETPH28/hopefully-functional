@@ -29,6 +29,11 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#ifStmt.
+    def visitIfStmt(self, ctx:ExprParser.IfStmtContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#infixExpr.
     def visitInfixExpr(self, ctx:ExprParser.InfixExprContext):
         return self.visitChildren(ctx)
@@ -39,13 +44,13 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#numberExpr.
-    def visitNumberExpr(self, ctx:ExprParser.NumberExprContext):
+    # Visit a parse tree produced by ExprParser#logicalExpr.
+    def visitLogicalExpr(self, ctx:ExprParser.LogicalExprContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#logicalExpr.
-    def visitLogicalExpr(self, ctx:ExprParser.LogicalExprContext):
+    # Visit a parse tree produced by ExprParser#atomExpr.
+    def visitAtomExpr(self, ctx:ExprParser.AtomExprContext):
         return self.visitChildren(ctx)
 
 
@@ -59,8 +64,18 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#boolExpr.
-    def visitBoolExpr(self, ctx:ExprParser.BoolExprContext):
+    # Visit a parse tree produced by ExprParser#numberAtom.
+    def visitNumberAtom(self, ctx:ExprParser.NumberAtomContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#booleanAtom.
+    def visitBooleanAtom(self, ctx:ExprParser.BooleanAtomContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#idAtom.
+    def visitIdAtom(self, ctx:ExprParser.IdAtomContext):
         return self.visitChildren(ctx)
 
 

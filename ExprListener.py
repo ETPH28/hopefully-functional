@@ -44,6 +44,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#ifStmt.
+    def enterIfStmt(self, ctx:ExprParser.IfStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#ifStmt.
+    def exitIfStmt(self, ctx:ExprParser.IfStmtContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#infixExpr.
     def enterInfixExpr(self, ctx:ExprParser.InfixExprContext):
         pass
@@ -62,21 +71,21 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#numberExpr.
-    def enterNumberExpr(self, ctx:ExprParser.NumberExprContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#numberExpr.
-    def exitNumberExpr(self, ctx:ExprParser.NumberExprContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#logicalExpr.
     def enterLogicalExpr(self, ctx:ExprParser.LogicalExprContext):
         pass
 
     # Exit a parse tree produced by ExprParser#logicalExpr.
     def exitLogicalExpr(self, ctx:ExprParser.LogicalExprContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#atomExpr.
+    def enterAtomExpr(self, ctx:ExprParser.AtomExprContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#atomExpr.
+    def exitAtomExpr(self, ctx:ExprParser.AtomExprContext):
         pass
 
 
@@ -98,12 +107,30 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#boolExpr.
-    def enterBoolExpr(self, ctx:ExprParser.BoolExprContext):
+    # Enter a parse tree produced by ExprParser#numberAtom.
+    def enterNumberAtom(self, ctx:ExprParser.NumberAtomContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#boolExpr.
-    def exitBoolExpr(self, ctx:ExprParser.BoolExprContext):
+    # Exit a parse tree produced by ExprParser#numberAtom.
+    def exitNumberAtom(self, ctx:ExprParser.NumberAtomContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#booleanAtom.
+    def enterBooleanAtom(self, ctx:ExprParser.BooleanAtomContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#booleanAtom.
+    def exitBooleanAtom(self, ctx:ExprParser.BooleanAtomContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#idAtom.
+    def enterIdAtom(self, ctx:ExprParser.IdAtomContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#idAtom.
+    def exitIdAtom(self, ctx:ExprParser.IdAtomContext):
         pass
 
 

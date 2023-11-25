@@ -18,6 +18,25 @@ class MyExprVisitor(ExprVisitor):
         else:
             print(f"{var} is {self.variables[var]}")
 
+    def visitIfStmt(self, ctx:ExprParser.IfStmtContext):
+        # Evaluate the condition
+        condition_result = self.visit(ctx.expr())
+
+        if condition_result:
+            # If the condition is true, visit and execute the statements in the if block
+            self.visit(ctx.stmts(0))
+        else:
+            # Check for elif clauses
+            for i in range(1, len(ctx.expr())):
+                elif_condition_result = self.visit(ctx.expr(i))
+                if elif_condition_result:
+                    # If an elif condition is true, visit and execute the corresponding statements
+                    self.visit(ctx.stmts(i))
+                    return  # Exit the if-elif-else chain
+            # If no if or elif conditions are true, check for an else block
+            if ctx.elseStmts is not None:
+                self.visit(ctx.elseStmts)
+
     def visitInfixExpr(self, ctx: ExprParser.InfixExprContext):
         self.visit(ctx.left)
         self.visit(ctx.right)
@@ -36,7 +55,53 @@ class MyExprVisitor(ExprVisitor):
             result = a / b
         elif ctx.OP_PWR():
             result = a ** b
-        elif ctx.OP_LT():  # <-- Added for boolean comparisons
+
+        self.stack.append(result)
+        return result
+
+    def visitNumberAtom(self, ctx: ExprParser.NumberAtomContext):
+        result = int(str(ctx.INT()))
+        self.stack.append(result)
+        return result
+
+    def visitBooleanAtom(self, ctx: ExprParser.BooleanAtomContext):  # <-- Added for boolean literals
+        result = True if str(ctx.BOOL()) == 'true' else False
+        self.stack.append(result)
+        return result
+
+    def visitNotExpr(self, ctx: ExprParser.NotExprContext):  # <-- Added for logical NOT
+        operand = self.visit(ctx.expr())
+        result = not operand
+        self.stack.append(result)
+        return result
+
+        # Visit a parse tree produced by ExprParser#logicalExpr.
+    def visitLogicalExpr(self, ctx: ExprParser.LogicalExprContext):
+        self.visit(ctx.left)
+        self.visit(ctx.right)
+
+        b = self.stack.pop()
+        a = self.stack.pop()
+        result = None
+
+        if ctx.OP_AND():  # <-- Added for boolean AND
+            result = a and b
+        elif ctx.OP_OR():  # <-- Added for boolean OR
+            result = a or b
+
+        self.stack.append(result)
+        return result
+
+        # Visit a parse tree produced by ExprParser#comparisonExpr.
+    def visitComparisonExpr(self, ctx: ExprParser.ComparisonExprContext):
+        self.visit(ctx.left)
+        self.visit(ctx.right)
+
+        b = self.stack.pop()
+        a = self.stack.pop()
+        result = None
+
+        if ctx.OP_LT():  # <-- Added for boolean comparisons
             result = a < b
         elif ctx.OP_LE():
             result = a <= b
@@ -46,29 +111,7 @@ class MyExprVisitor(ExprVisitor):
             result = a >= b
         elif ctx.OP_EQ():
             result = a == b
-        elif ctx.OP_NE():
-            result = a != b
-        elif ctx.OP_AND():  # <-- Added for boolean AND
-            result = a and b
-        elif ctx.OP_OR():  # <-- Added for boolean OR
-            result = a or b
 
-        self.stack.append(result)
-        return result
-
-    def visitNumberExpr(self, ctx: ExprParser.NumberExprContext):
-        result = int(str(ctx.INT()))
-        self.stack.append(result)
-        return result
-
-    def visitBoolExpr(self, ctx: ExprParser.BoolExprContext):  # <-- Added for boolean literals
-        result = True if str(ctx.BOOL()) == 'true' else False
-        self.stack.append(result)
-        return result
-
-    def visitNotExpr(self, ctx: ExprParser.NotExprContext):  # <-- Added for logical NOT
-        operand = self.visit(ctx.expr())
-        result = not operand
         self.stack.append(result)
         return result
 

@@ -4,20 +4,26 @@ prog: stmts EOF;
 //prog: expr EOF;
 
 stmts: stmt+;
-stmt: var=ID '=' exp=expr ';' #assignStmt
+stmt: var=ID ASSIGN exp=expr ';' #assignStmt
     | 'print(' var=ID ')' ';' #printStmt
+    | 'if' expr 'then' stmts ('elif' expr 'then' stmts)* ('else' stmts)? 'end'   #ifStmt
     ;
 
 expr: left=expr op='^' right=expr         #infixExpr
     | left=expr op=('*'|'/') right=expr   #infixExpr
     | left=expr op=('+'|'-') right=expr   #infixExpr
     | left=expr op=('<'|'>'|'<='|'>='|'=='|'!=') right=expr   #comparisonExpr
-    | left=expr op=('&&'|'||') right=expr  #logicalExpr
+    | left=expr op=(OP_AND|OP_OR) right=expr  #logicalExpr
     | '!' expr                            #notExpr
-    | BOOL                                #boolExpr
-    | INT                                 #numberExpr
     | '(' expr ')'                        #parensExpr
+    | atom                                 #atomExpr
     ;
+
+atom
+ : INT            #numberAtom
+ | BOOL           #booleanAtom
+ | ID             #idAtom
+ ;
 
 OP_ADD: '+';
 OP_SUB: '-';
@@ -32,6 +38,8 @@ OP_EQ: '==';
 OP_NE: '!=';
 OP_AND: '&&';
 OP_OR: '||';
+
+ASSIGN : '=';
 
 BOOL: 'true' | 'false';
 

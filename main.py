@@ -7,13 +7,9 @@ from MyExprVisitor import MyExprVisitor
 
 def main(argv):
     input = InputStream("""
-        a2 = 9>3;
-        a3 = 9 > 3;
-        print(a4);
+        aa2 = 3 == (2+1);
+        a2 = 3 < 3;
         print(a2);
-        print(a5);
-        a5 = 9 * 17;
-        print(a5);
         """.replace("\n", " "))
     # input = InputStream("10 - 2 * 2 / 4")
     # input = StdinStream()
