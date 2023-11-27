@@ -1,6 +1,7 @@
 from ExprParser import ExprParser
 from ExprVisitor import ExprVisitor
 
+
 class MyExprVisitor(ExprVisitor):
     def __init__(self):
         super(MyExprVisitor, self).__init__()
@@ -12,19 +13,18 @@ class MyExprVisitor(ExprVisitor):
         self.variables[str(ctx.var.text)] = self.stack.pop()
 
     def visitPrintStmt(self, ctx: ExprParser.PrintStmtContext):
-        var = str(ctx.var.text)
-        if var not in self.variables:
-            print(f'{var} is undefined')
-        else:
-            print(f"{var} is {self.variables[var]}")
+        var = self.visit(ctx.expr())
+        print(var)
 
-    def visitIfStmt(self, ctx:ExprParser.IfStmtContext):
+    def visitIfStmt(self, ctx: ExprParser.IfStmtContext):
         # Evaluate the condition
         condition_result = self.visit(ctx.expr())
 
         if condition_result:
             # If the condition is true, visit and execute the statements in the if block
-            self.visit(ctx.stmts(0))
+            self.visit(ctx.stmts())
+            #self.visit(ctx.stmts(0))
+        '''
         else:
             # Check for elif clauses
             for i in range(1, len(ctx.expr())):
@@ -36,6 +36,7 @@ class MyExprVisitor(ExprVisitor):
             # If no if or elif conditions are true, check for an else block
             if ctx.elseStmts is not None:
                 self.visit(ctx.elseStmts)
+        '''
 
     def visitInfixExpr(self, ctx: ExprParser.InfixExprContext):
         self.visit(ctx.left)
@@ -68,6 +69,14 @@ class MyExprVisitor(ExprVisitor):
         result = True if str(ctx.BOOL()) == 'true' else False
         self.stack.append(result)
         return result
+
+    def visitIdAtom(self, ctx:ExprParser.IdAtomContext):
+        var = str(ctx.ID())
+        if var not in self.variables:
+            print(f'{var} is undefined')
+        else:
+            self.stack.append(self.variables[var])
+            return self.variables[var]
 
     def visitNotExpr(self, ctx: ExprParser.NotExprContext):  # <-- Added for logical NOT
         operand = self.visit(ctx.expr())

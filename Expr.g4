@@ -5,8 +5,9 @@ prog: stmts EOF;
 
 stmts: stmt+;
 stmt: var=ID ASSIGN exp=expr ';' #assignStmt
-    | 'print(' var=ID ')' ';' #printStmt
-    | 'if' expr 'then' stmts ('elif' expr 'then' stmts)* ('else' stmts)? 'end'   #ifStmt
+    | 'print(' var=expr ')' ';' #printStmt
+    |'if' expr 'then' stmts 'end'   #ifStmt
+    //| 'if' expr 'then' stmts ('elif' expr 'then' stmts)* ('else' stmts)? 'end'   #ifStmt
     ;
 
 expr: left=expr op='^' right=expr         #infixExpr
