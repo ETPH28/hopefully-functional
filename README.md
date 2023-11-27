@@ -1,2 +1,2 @@
 # hopefully-functional
-Basic Design For a Functional Programming Language for CS152
+Basic Design For a Programming Language for CS152
