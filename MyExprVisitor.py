@@ -18,25 +18,29 @@ class MyExprVisitor(ExprVisitor):
 
     def visitIfStmt(self, ctx: ExprParser.IfStmtContext):
         # Evaluate the condition
-        condition_result = self.visit(ctx.expr())
 
-        if condition_result:
-            # If the condition is true, visit and execute the statements in the if block
+        evaluated = False
+
+        for i in range(0, len(ctx.expr())):
+            condition_result = self.visit(ctx.expr(i))
+            if condition_result:
+                evaluated = True
+                # If a condition is true, visit and execute the corresponding statements
+                self.visit(ctx.stmts(i))
+                return  # Exit the if-elif-else chain
+        # If no if or elif conditions are true, check for an else block
+        if len(ctx.expr()) != len(ctx.stmts()) and not evaluated:
+            self.visit(ctx.stmts(len(ctx.stmts())-1))
+
+    def visitWhileStmt(self, ctx: ExprParser.WhileStmtContext):
+        # Evaluate the condition
+        while_condition_result = self.visit(ctx.expr())
+
+        while while_condition_result:
+            # Execute the statements in the while loop
             self.visit(ctx.stmts())
-            #self.visit(ctx.stmts(0))
-        '''
-        else:
-            # Check for elif clauses
-            for i in range(1, len(ctx.expr())):
-                elif_condition_result = self.visit(ctx.expr(i))
-                if elif_condition_result:
-                    # If an elif condition is true, visit and execute the corresponding statements
-                    self.visit(ctx.stmts(i))
-                    return  # Exit the if-elif-else chain
-            # If no if or elif conditions are true, check for an else block
-            if ctx.elseStmts is not None:
-                self.visit(ctx.elseStmts)
-        '''
+            # Re-evaluate the condition for the next iteration
+            while_condition_result = self.visit(ctx.expr())
 
     def visitInfixExpr(self, ctx: ExprParser.InfixExprContext):
         self.visit(ctx.left)
@@ -70,7 +74,7 @@ class MyExprVisitor(ExprVisitor):
         self.stack.append(result)
         return result
 
-    def visitIdAtom(self, ctx:ExprParser.IdAtomContext):
+    def visitIdAtom(self, ctx: ExprParser.IdAtomContext):
         var = str(ctx.ID())
         if var not in self.variables:
             print(f'{var} is undefined')

@@ -53,6 +53,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#whileStmt.
+    def enterWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#whileStmt.
+    def exitWhileStmt(self, ctx:ExprParser.WhileStmtContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#infixExpr.
     def enterInfixExpr(self, ctx:ExprParser.InfixExprContext):
         pass
